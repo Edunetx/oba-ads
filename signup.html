@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OBA Ads - Sign Up</title>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OBA-ADS Signup</title>
   <style>
     body {
-      margin: 0;
       background: #000;
       color: #fff;
       font-family: Arial, sans-serif;
@@ -20,86 +16,61 @@
     }
     .card {
       background: #111;
-      padding: 2rem;
+      padding: 30px;
       border-radius: 12px;
-      width: 90%;
-      max-width: 400px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.1);
-    }
-    .card h2 {
+      width: 350px;
       text-align: center;
-      margin-bottom: 1.5rem;
     }
     input {
-      width: 100%;
-      padding: 12px;
-      margin: 8px 0;
+      width: 90%;
+      margin: 10px 0;
+      padding: 10px;
+      border-radius: 6px;
       border: none;
-      border-radius: 8px;
-      background: #222;
-      color: #fff;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 1rem;
-      border: none;
-      border-radius: 8px;
-      background: #0f0;
-      color: #000;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #0c0;
-    }
-    .notif {
-      text-align: center;
-      margin-top: 1rem;
+      background: #0a84ff;
+      color: #fff;
       padding: 10px;
-      border-radius: 8px;
-      display: none;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
     }
-    .notif.error {
-      background: red;
-      color: white;
+    .login-link {
+      margin-top: 15px;
+      font-size: 14px;
     }
-    .notif.success {
-      background: green;
-      color: white;
+    .error, .success {
+      margin-top: 10px;
+      font-size: 14px;
     }
-    .alt-link {
-      text-align: center;
-      margin-top: 1rem;
-      font-size: 0.9rem;
-    }
-    .alt-link a {
-      color: #0f0;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .alt-link a:hover {
-      text-decoration: underline;
-    }
+    .error { color: red; }
+    .success { color: lightgreen; }
   </style>
 </head>
 <body>
-
   <div class="card">
-    <h2>Sign Up</h2>
-    <input type="text" id="username" placeholder="Username" required>
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password (min 6 chars)" required>
-    <input type="text" id="referral" placeholder="Referral Code (optional)">
+    <h2>OBA-ADS Signup</h2>
+    <input type="text" id="username" placeholder="Username" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password (min 6 chars)" required />
+    <input type="text" id="referral" placeholder="Referral Code (Optional)" />
     <button onclick="signup()">Create Account</button>
-    <div class="notif" id="notif"></div>
-    <div class="alt-link">
-      Already have an account? <a href="login.html">Login</a>
+    <div id="msg"></div>
+    <div class="login-link">
+      Already have an account? <a href="login.html" style="color:#0a84ff">Login</a>
     </div>
   </div>
 
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
   <script>
-    // Firebase config
+    // ✅ Your Firebase Config
     const firebaseConfig = {
       apiKey: "AIzaSyAqcoCo_V68ILJReJ2WNDUhlMvoH_FbQn4",
       authDomain: "oba-ads.firebaseapp.com",
@@ -109,64 +80,50 @@
       appId: "1:801050707463:web:6eb31025639431e197cca2"
     };
 
-    // Init Firebase
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
-
-    const notif = document.getElementById("notif");
-
-    function showNotif(message, type="error") {
-      notif.textContent = message;
-      notif.className = "notif " + type;
-      notif.style.display = "block";
-    }
 
     async function signup() {
       const username = document.getElementById("username").value.trim();
       const email = document.getElementById("email").value.trim();
       const password = document.getElementById("password").value;
-      let referral = document.getElementById("referral").value.trim();
+      const referral = document.getElementById("referral").value.trim();
+      const msg = document.getElementById("msg");
 
-      if (username === "" || email === "" || password === "") {
-        return showNotif("All fields except referral are required.");
+      if (!username || !email || !password) {
+        msg.innerHTML = "<p class='error'>All fields are required.</p>";
+        return;
       }
       if (password.length < 6) {
-        return showNotif("Password must be at least 6 characters.");
+        msg.innerHTML = "<p class='error'>Password must be at least 6 characters.</p>";
+        return;
       }
 
       try {
-        // Check if username is unique
-        const userSnap = await db.collection("users").where("username", "==", username).get();
-        if (!userSnap.empty) {
-          return showNotif("Username already taken.");
-        }
-
-        // Default referral if none provided
-        if (referral === "") referral = "OBA";
-
-        // Create auth user
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
-        const uid = userCredential.user.uid;
+        const user = userCredential.user;
 
-        // Create Firestore doc
-        await db.collection("users").doc(uid).set({
-          username: username,
-          email: email,
-          balance: 1, // signup bonus
-          totalEarnings: 1, // signup bonus
-          referredBy: referral,
-          createdAt: new Date().toISOString()
+        // ✅ Signup bonus logic
+        let bonus = 0;
+        let referredBy = referral || "OBA"; // fallback to "OBA"
+        if (referredBy) bonus = 1; // $1 signup bonus
+
+        await db.collection("users").doc(user.uid).set({
+          username,
+          email,
+          balance: bonus,
+          totalEarnings: bonus,
+          referredBy,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        showNotif("Account created successfully!", "success");
-
+        msg.innerHTML = "<p class='success'>Account created successfully! Redirecting...</p>";
         setTimeout(() => {
           window.location.href = "login.html";
-        }, 1500);
-
+        }, 2000);
       } catch (error) {
-        showNotif(error.message);
+        msg.innerHTML = `<p class='error'>${error.message}</p>`;
       }
     }
   </script>
