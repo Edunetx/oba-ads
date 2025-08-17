@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBA-ADS Login</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    user-select: none;
+  }
+
+  .card {
+    width: 92%;
+    max-width: 360px;
+    background: rgba(255,255,255,0.06);
+    padding: 28px;
+    border-radius: 14px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    animation: rise 0.6s ease;
+  }
+
+  @media screen and (min-width: 768px) {
+    .card {
+      max-width: 480px;
+      padding: 36px;
+    }
+  }
+
+  @keyframes rise {
+    from {opacity:0; transform: translateY(40px);}
+    to {opacity:1; transform: translateY(0);}
+  }
+
+  input {
+    width: 90%;
+    padding: 12px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
+
+  input::placeholder {
+    color: rgba(255,255,255,0.7);
+  }
+
+  button {
+    width: 94%;
+    padding: 12px;
+    margin-top: 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #ff8c00, #ff0080);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+  }
+
+  .msg {
+    margin-top: 12px;
+    font-size: 14px;
+    user-select: none;
+  }
+
+  .msg p.error { color: #ff4d4f; }
+  .msg p.success { color: #00ff99; }
+
+  .link {
+    display: block;
+    margin-top: 14px;
+    color: #aaa;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .link:hover { text-decoration: underline; }
+</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+</head>
+<body>
+<div class="card">
+  <h2>OBA-ADS Login</h2>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <div class="msg" id="msg"></div>
+  <a href="#" class="link" onclick="forgotPassword()">Forgot Password?</a>
+  <a href="signup.html" class="link">Don't have an account? Sign Up</a>
+</div>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAqcoCo_V68ILJReJ2WNDUhlMvoH_FbQn4",
+    authDomain: "oba-ads.firebaseapp.com",
+    projectId: "oba-ads",
+    storageBucket: "oba-ads.firebasestorage.app",
+    messagingSenderId: "801050707463",
+    appId: "1:801050707463:web:6eb31025639431e197cca2"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  async function login() {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const msg = document.getElementById("msg");
+
+    if (!email || !password) {
+      msg.innerHTML = "<p class='error'>Email and password are required.</p>";
+      return;
+    }
+
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      msg.innerHTML = "<p class='success'>Login successful. Redirecting...</p>";
+      setTimeout(() => {
+        window.location.href = "home.html"; // redirect after login
+      }, 1500);
+    } catch (error) {
+      let errorMsg = "Something went wrong. Try again.";
+      if (error.code === "auth/user-not-found") errorMsg = "No account found with this email.";
+      else if (error.code === "auth/wrong-password") errorMsg = "Incorrect password.";
+      else if (error.code === "auth/invalid-email") errorMsg = "Invalid email format.";
+      msg.innerHTML = `<p class='error'>${errorMsg}</p>`;
+    }
+  }
+
+  function forgotPassword() {
+    const email = prompt("Enter your email for password reset:");
+    if (!email) return;
+    auth.sendPasswordResetEmail(email)
+      .then(() => alert("Password reset email sent. Check your inbox."))
+      .catch(err => alert("Error: " + err.message));
+  }
+</script>
+</body>
+</html>
