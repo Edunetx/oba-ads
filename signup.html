@@ -1,136 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OBA-ADS Signup</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBA Ads - Signup</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
   <style>
-    /* Background live gradient */
     body {
       margin: 0;
-      padding: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(135deg, #6a11cb, #2575fc);
-      background-size: 200% 200%;
-      animation: gradientMove 8s ease infinite;
-      font-family: "Segoe UI", sans-serif;
-      color: #fff;
+      background: black;
+      font-family: Arial, sans-serif;
+      color: white;
+      overflow: hidden;
     }
 
+    /* background glow animation */
+    body::before {
+      content: "";
+      position: absolute;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, #ff0066, #00f7ff, #ffcc00, #ff0066);
+      background-size: 400% 400%;
+      animation: gradientMove 12s ease infinite;
+      z-index: -1;
+      filter: blur(80px);
+    }
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    /* Glass Card */
-    .card {
-      width: 92%;
-      max-width: 380px;
-      padding: 35px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.6);
+    .container {
+      background: rgba(20, 20, 20, 0.9);
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
+      width: 100%;
+      max-width: 350px;
       text-align: center;
-      animation: fadeIn 0.8s ease;
+      animation: fadeInUp 1s ease;
+    }
+    @keyframes fadeInUp {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
-    .card h2 {
-      margin-bottom: 20px;
+    h2 {
+      margin-bottom: 15px;
       font-size: 24px;
-      font-weight: 600;
-      color: #ffffff;
+      background: linear-gradient(90deg, #ffcc00, #ff0066);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
 
-    /* Inputs */
     input {
       width: 100%;
-      padding: 14px 16px;
+      padding: 12px;
       margin: 10px 0;
-      border-radius: 10px;
       border: none;
-      background: rgba(0,0,0,0.3);
-      color: #fff;
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-
-    input:focus {
+      border-radius: 8px;
+      background: #111;
+      color: white;
+      font-size: 15px;
       outline: none;
-      background: rgba(0,0,0,0.5);
-      border: 1px solid #4facfe;
+      box-shadow: inset 0 0 5px rgba(255,255,255,0.1);
+      transition: 0.3s;
+    }
+    input:focus {
+      box-shadow: 0 0 8px #00f7ff;
     }
 
-    /* Button */
     button {
       width: 100%;
-      padding: 14px;
-      margin-top: 18px;
+      padding: 12px;
       border: none;
-      border-radius: 10px;
-      background: linear-gradient(135deg, #4facfe, #00f2fe);
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #00f7ff, #ff00cc);
+      color: black;
+      font-weight: bold;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.3s ease;
+      margin-top: 10px;
+      transition: 0.4s;
     }
-
     button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(79,172,254,0.6);
+      transform: scale(1.05);
+      box-shadow: 0 0 15px #00f7ff;
     }
 
-    /* Links */
-    .login-link {
-      margin-top: 18px;
-      font-size: 14px;
-    }
-    .login-link a {
-      color: #4facfe;
-      text-decoration: none;
-    }
-    .login-link a:hover {
-      text-decoration: underline;
-    }
-
-    /* Messages */
-    .error, .success {
+    .msg {
       margin-top: 12px;
       font-size: 14px;
     }
-    .error { color: #ff6b6b; }
-    .success { color: #2ecc71; }
+    .error {
+      color: #ff4444;
+    }
+    .success {
+      color: #00ff99;
+    }
 
-    /* Animation */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
+    .link {
+      margin-top: 15px;
+      font-size: 14px;
+      color: #aaa;
+    }
+    .link a {
+      color: #00f7ff;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Create Your Account</h2>
-    <input type="text" id="username" placeholder="Username" required />
-    <input type="email" id="email" placeholder="Email Address" required />
-    <input type="password" id="password" placeholder="Password (min 6 chars)" required />
-    <input type="text" id="referral" placeholder="Referral Code (Optional)" />
+  <div class="container">
+    <h2>Create Account</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password (min 6 chars)" required>
+    <input type="text" id="referral" placeholder="Referral (optional)">
     <button onclick="signup()">Sign Up</button>
-    <div id="msg"></div>
-    <div class="login-link">
+    <div id="msg" class="msg"></div>
+    <div class="link">
       Already have an account? <a href="login.html">Login</a>
     </div>
   </div>
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -154,15 +153,22 @@
       const msg = document.getElementById("msg");
 
       if (!username || !email || !password) {
-        msg.innerHTML = "<p class='error'>⚠️ All fields are required.</p>";
+        msg.innerHTML = "<p class='error'>All fields are required.</p>";
         return;
       }
       if (password.length < 6) {
-        msg.innerHTML = "<p class='error'>⚠️ Password must be at least 6 characters.</p>";
+        msg.innerHTML = "<p class='error'>Password must be at least 6 characters.</p>";
         return;
       }
 
       try {
+        // Check if username exists
+        const userCheck = await db.collection("users").where("username", "==", username.toLowerCase()).get();
+        if (!userCheck.empty) {
+          msg.innerHTML = "<p class='error'>Username already taken, choose another one.</p>";
+          return;
+        }
+
         const userCredential = await auth.createUserWithEmailAndPassword(email, password);
         const user = userCredential.user;
 
@@ -171,7 +177,7 @@
         if (referredBy) bonus = 1;
 
         await db.collection("users").doc(user.uid).set({
-          username,
+          username: username.toLowerCase(),
           email,
           balance: bonus,
           totalEarnings: bonus,
@@ -179,7 +185,7 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        msg.innerHTML = "<p class='success'>✅ Account created! Redirecting...</p>";
+        msg.innerHTML = "<p class='success'>Account created successfully. Redirecting...</p>";
         setTimeout(() => {
           window.location.href = "login.html";
         }, 2000);
@@ -192,7 +198,7 @@
         } else if (error.code === "auth/weak-password") {
           errorMsg = "Password too weak.";
         }
-        msg.innerHTML = `<p class='error'>⚠️ ${errorMsg}</p>`;
+        msg.innerHTML = `<p class='error'>${errorMsg}</p>`;
       }
     }
   </script>
