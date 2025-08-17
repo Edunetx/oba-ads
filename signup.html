@@ -16,18 +16,25 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, #000000, #434343, #ffffff);
-    background-size: 400% 400%;
-    animation: gradientAnim 10s ease infinite;
+    background: url('https://images.unsplash.com/photo-1588776814546-3b460a2ef15d?auto=format&fit=crop&w=1600&q=80') no-repeat center center;
+    background-size: cover;
+    position: relative;
   }
 
-  @keyframes gradientAnim {
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+  /* dark overlay for readability */
+  body::before {
+    content: "";
+    position: absolute;
+    top:0; left:0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 0;
   }
 
   .signup-container {
+    position: relative;
+    z-index: 1;
     background: rgba(0,0,0,0.85);
     padding: 30px;
     border-radius: 12px;
@@ -142,29 +149,24 @@
     if (!username || !email || !password) return notify("Fill in all required fields!", "#f00");
     if (password.length < 6) return notify("Password must be at least 6 characters", "#f00");
 
-    if (!referral) referral = "OBA"; // default referral
+    if (!referral) referral = "OBA";
 
     try {
-      // check username uniqueness
       const usernameSnap = await db.collection("users").where("username", "==", username).get();
       if (!usernameSnap.empty) return notify("Username is already taken", "#f00");
 
-      // create auth
       const cred = await auth.createUserWithEmailAndPassword(email, password);
 
-      // create user document
       await db.collection("users").doc(cred.user.uid).set({
         username,
         email,
-        balance: 1, // signup bonus
+        balance: 1,
         totalEarnings: 0,
         referral,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       });
 
       notify("Account created successfully! You got $1 signup bonus.", "#0f0");
-
-      // redirect after 2s
       setTimeout(() => { window.location.href = "login.html"; }, 2000);
 
     } catch (error) {
