@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OBA ADS</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: #000;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      color: teal;
+    }
+    p {
+      margin-bottom: 30px;
+      font-size: 1.1rem;
+    }
+    .btn {
+      display: inline-block;
+      padding: 12px 25px;
+      margin: 10px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      color: white;
+      transition: 0.3s;
+    }
+    .btn-signup {
+      background: linear-gradient(45deg, teal, #00bfa6);
+    }
+    .btn-login {
+      background: linear-gradient(45deg, #444, #666);
+    }
+    .btn:hover {
+      opacity: 0.8;
+    }
+    footer {
+      position: absolute;
+      bottom: 10px;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to OBA ADS</h1>
+  <p>Earn rewards by watching ads daily.</p>
+
+  <a href="signup.html" class="btn btn-signup">Create Account</a>
+  <a href="login.html" class="btn btn-login">Login</a>
+
+  <footer>© 2025 OBA ADS</footer>
+
+  <!-- Firebase App (Core SDK) -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js"></script>
+  <!-- Firebase Authentication -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js"></script>
+
+  <script>
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAqcoCo_V68ILJReJ2WNDUhlMvoH_FbQn4",
+      authDomain: "oba-ads.firebaseapp.com",
+      projectId: "oba-ads",
+      storageBucket: "oba-ads.firebasestorage.app",
+      messagingSenderId: "801050707463",
+      appId: "1:801050707463:web:6eb31025639431e197cca2"
+    };
+
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    console.log("Firebase Connected ✅");
+  </script>
+</body>
+</html>
