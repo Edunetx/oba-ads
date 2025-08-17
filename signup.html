@@ -1,170 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>OBA Ads - Signup</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OBA-ADS Signup</title>
+<style>
+  body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    user-select: none; /* disable copy */
+  }
 
-  <!-- Firebase v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+  .card {
+    width: 92%;
+    max-width: 360px;
+    background: rgba(255,255,255,0.06);
+    padding: 28px;
+    border-radius: 14px;
+    text-align: center;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+    animation: rise 0.6s ease;
+  }
 
-  <style>
-    body {
-      margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center;
-      background: #000; color: #fff; font-family: "Segoe UI", Arial, sans-serif; overflow: hidden;
-    }
-    /* soft animated glow behind the card */
-    body::before {
-      content: ""; position: absolute; inset: -50%; z-index: -1; filter: blur(80px);
-      background: radial-gradient(600px 300px at 30% 30%, #161616 0%, transparent 60%),
-                  radial-gradient(600px 300px at 70% 70%, #131313 0%, transparent 60%);
-      animation: breathe 6s ease-in-out infinite alternate;
-    }
-    @keyframes breathe { from { opacity: .7 } to { opacity: .95 } }
-
+  @media screen and (min-width: 768px) {
     .card {
-      width: 92%; max-width: 360px; padding: 28px; text-align: center;
-      background: rgba(255,255,255,0.06); border-radius: 14px; backdrop-filter: blur(12px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.7); animation: rise .6s ease;
+      max-width: 480px;
+      padding: 36px;
     }
-    @keyframes rise { from { opacity:0; transform: translateY(18px) } to { opacity:1; transform:none } }
+  }
 
-    h2 { margin: 0 0 16px; font-size: 22px; letter-spacing: .3px; }
-    .sub { margin: -6px 0 18px; font-size: 12px; color: #aaa; }
+  @keyframes rise {
+    from {opacity:0; transform: translateY(40px);}
+    to {opacity:1; transform: translateY(0);}
+  }
 
-    .field { margin: 10px 0 }
-    input {
-      width: 92%; padding: 12px; border-radius: 10px; border: none;
-      background: rgba(255,255,255,0.08); color: #fff; font-size: 14px; outline: none;
-      transition: box-shadow .25s, background .25s, transform .05s;
-    }
-    input:focus { box-shadow: 0 0 0 2px #1fb6ff55, 0 0 10px #1fb6ff44; background: rgba(255,255,255,0.12) }
+  input {
+    width: 90%;
+    padding: 12px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+  }
 
-    button {
-      width: 94%; padding: 12px; margin-top: 14px; border: none; border-radius: 10px;
-      background: linear-gradient(90deg, #1fb6ff, #00e6ff);
-      color: #001217; font-weight: 700; letter-spacing: .2px; cursor: pointer;
-      transition: transform .15s ease, box-shadow .25s ease, filter .25s ease;
-    }
-    button:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(31,182,255,.35) }
-    button:active { transform: translateY(0) scale(.99) }
+  input::placeholder {
+    color: rgba(255,255,255,0.7);
+  }
 
-    .msg { min-height: 18px; margin-top: 10px; font-size: 13px }
-    .error { color: #ff5c5c }
-    .success { color: #2ecc71 }
+  button {
+    width: 94%;
+    padding: 12px;
+    margin-top: 16px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(90deg, #ff8c00, #ff0080);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
 
-    .alt { margin-top: 14px; font-size: 13px; color: #bdbdbd }
-    .alt a { color: #1fb6ff; text-decoration: none }
-    .alt a:hover { text-decoration: underline }
-  </style>
+  button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+  }
+
+  .msg {
+    margin-top: 12px;
+    font-size: 14px;
+    user-select: none; /* prevent copying */
+  }
+
+  .msg p.error { color: #ff4d4f; }
+  .msg p.success { color: #00ff99; }
+
+  .login-link {
+    margin-top: 14px;
+    display: block;
+    color: #aaa;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .login-link:hover { text-decoration: underline; }
+</style>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
-  <div class="card">
-    <h2>Create Account</h2>
-    <div class="sub">OBA Ads — earn by watching ads</div>
+<div class="card">
+  <h2>OBA-ADS Signup</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Password (min 6 chars)">
+  <input type="text" id="referral" placeholder="Referral (optional)">
+  <button onclick="signup()">Sign Up</button>
+  <div class="msg" id="msg"></div>
+  <a href="login.html" class="login-link">Already have an account? Login</a>
+</div>
 
-    <div class="field"><input id="username" type="text" placeholder="Username" autocomplete="username" required></div>
-    <div class="field"><input id="email" type="email" placeholder="Email" autocomplete="email" required></div>
-    <div class="field"><input id="password" type="password" placeholder="Password (min 6 chars)" autocomplete="new-password" required></div>
-    <div class="field"><input id="referral" type="text" placeholder="Referral (optional)" autocomplete="off"></div>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAqcoCo_V68ILJReJ2WNDUhlMvoH_FbQn4",
+    authDomain: "oba-ads.firebaseapp.com",
+    projectId: "oba-ads",
+    storageBucket: "oba-ads.firebasestorage.app",
+    messagingSenderId: "801050707463",
+    appId: "1:801050707463:web:6eb31025639431e197cca2"
+  };
 
-    <button id="signupBtn">Sign Up</button>
-    <div id="msg" class="msg"></div>
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+  const db = firebase.firestore();
 
-    <div class="alt">Already have an account? <a href="login.html">Login</a></div>
-  </div>
+  async function signup() {
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+    const referral = document.getElementById("referral").value.trim();
+    const msg = document.getElementById("msg");
 
-  <script>
-    // Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyAqcoCo_V68ILJReJ2WNDUhlMvoH_FbQn4",
-      authDomain: "oba-ads.firebaseapp.com",
-      projectId: "oba-ads",
-      storageBucket: "oba-ads.firebasestorage.app",
-      messagingSenderId: "801050707463",
-      appId: "1:801050707463:web:6eb31025639431e197cca2"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+    if (!username || !email || !password) {
+      msg.innerHTML = "<p class='error'>All fields are required.</p>";
+      return;
+    }
+    if (password.length < 6) {
+      msg.innerHTML = "<p class='error'>Password must be at least 6 characters.</p>";
+      return;
+    }
 
-    const $ = (id) => document.getElementById(id);
-    $("signupBtn").addEventListener("click", signup);
-
-    async function signup() {
-      const msg = $("msg");
-      msg.className = "msg";
-      msg.textContent = "";
-
-      const rawName = $("username").value.trim();
-      const username = rawName.toLowerCase(); // enforce single case
-      const email = $("email").value.trim();
-      const password = $("password").value;
-      const referralInput = $("referral").value.trim();
-      const referredBy = referralInput || "OBA";
-
-      // Basic validation
-      if (!username || !email || !password) return showErr("All fields are required.");
-      if (username.length < 3) return showErr("Username must be at least 3 characters.");
-      if (password.length < 6) return showErr("Password must be at least 6 characters.");
-      if (!/^[a-z0-9._-]+$/.test(username)) return showErr("Username can only contain letters, numbers, dot, dash, underscore.");
-
-      try {
-        // Create auth user first
-        const cred = await auth.createUserWithEmailAndPassword(email, password);
-        const user = cred.user;
-
-        // Transaction: lock username + create profile atomically
-        await db.runTransaction(async (tx) => {
-          const unameRef = db.collection("usernames").doc(username);
-          const unameSnap = await tx.get(unameRef);
-          if (unameSnap.exists) {
-            throw new Error("USERNAME_TAKEN");
-          }
-
-          // Reserve the username (owned by this uid)
-          tx.set(unameRef, {
-            uid: user.uid,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-
-          // Create profile
-          const userRef = db.collection("users").doc(user.uid);
-          tx.set(userRef, {
-            username: username,
-            email: email,
-            balance: 1,          // $1 signup bonus
-            totalEarnings: 1,    // $1 signup bonus
-            referredBy: referredBy,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        });
-
-        showOk("Account created successfully. Redirecting...");
-        setTimeout(() => (window.location.href = "login.html"), 1800);
-
-      } catch (err) {
-        // If username taken after auth creation, roll back the auth user so they can try again
-        if (err && err.message === "USERNAME_TAKEN" && auth.currentUser) {
-          try { await auth.currentUser.delete(); } catch(e) {}
-          return showErr("Username already taken, choose another one.");
-        }
-
-        // Friendly auth errors
-        if (err && err.code) {
-          if (err.code === "auth/email-already-in-use") return showErr("This email is already registered.");
-          if (err.code === "auth/invalid-email") return showErr("Invalid email format.");
-          if (err.code === "auth/weak-password") return showErr("Password too weak.");
-          if (err.code === "permission-denied") return showErr("Permission denied by database rules.");
-        }
-        showErr("Something went wrong. Please try again.");
+    try {
+      // Check if username already exists
+      const userCheck = await db.collection("users").where("username", "==", username).get();
+      if (!userCheck.empty) {
+        msg.innerHTML = "<p class='error'>Username already taken, choose another one.</p>";
+        return;
       }
 
-      function showErr(t){ msg.className = "msg error"; msg.textContent = t; }
-      function showOk(t){ msg.className = "msg success"; msg.textContent = t; }
+      const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      let bonus = 0;
+      let referredBy = referral || "OBA";
+      if (referredBy) bonus = 1;
+
+      await db.collection("users").doc(user.uid).set({
+        username,
+        email,
+        balance: bonus,
+        totalEarnings: bonus,
+        referredBy,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+      msg.innerHTML = "<p class='success'>Account created successfully. Redirecting...</p>";
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 2000);
+    } catch (error) {
+      let errorMsg = "Something went wrong. Try again.";
+      if (error.code === "auth/email-already-in-use") {
+        errorMsg = "This email is already registered.";
+      } else if (error.code === "auth/invalid-email") {
+        errorMsg = "Invalid email format.";
+      } else if (error.code === "auth/weak-password") {
+        errorMsg = "Password too weak.";
+      }
+      msg.innerHTML = `<p class='error'>${errorMsg}</p>`;
     }
-  </script>
+  }
+</script>
 </body>
 </html>
