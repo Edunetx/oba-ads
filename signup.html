@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBA Ads - Sign Up</title>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .card {
+      background: #111;
+      padding: 2rem;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.1);
+    }
+    .card h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 8px;
+      background: #222;
+      color: #fff;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 1rem;
+      border: none;
+      border-radius: 8px;
+      background: #0f0;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #0c0;
+    }
+    .notif {
+      text-align: center;
+      margin-top: 1rem;
+      padding: 10px;
+      border-radius: 8px;
+      display: none;
+    }
+    .notif.error {
+      background: red;
+      color: white;
+    }
+    .notif.success {
+      background: green;
+      color: white;
+    }
+    .alt-link {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+    .alt-link a {
+      color: #0f0;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .alt-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Sign Up</h2>
+    <input type="text" id="username" placeholder="Username" required>
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password (min 6 chars)" required>
+    <input type="text" id="referral" placeholder="Referral Code (optional)">
+    <button onclick="signup()">Create Account</button>
+    <div class="notif" id="notif"></div>
+    <div class="alt-link">
+      Already have an account? <a href="login.html">Login</a>
+    </div>
+  </div>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyAqcoCo_V68ILJReJ2WNDUhlMvoH_FbQn4",
+      authDomain: "oba-ads.firebaseapp.com",
+      projectId: "oba-ads",
+      storageBucket: "oba-ads.firebasestorage.app",
+      messagingSenderId: "801050707463",
+      appId: "1:801050707463:web:6eb31025639431e197cca2"
+    };
+
+    // Init Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    const notif = document.getElementById("notif");
+
+    function showNotif(message, type="error") {
+      notif.textContent = message;
+      notif.className = "notif " + type;
+      notif.style.display = "block";
+    }
+
+    async function signup() {
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      let referral = document.getElementById("referral").value.trim();
+
+      if (username === "" || email === "" || password === "") {
+        return showNotif("All fields except referral are required.");
+      }
+      if (password.length < 6) {
+        return showNotif("Password must be at least 6 characters.");
+      }
+
+      try {
+        // Check if username is unique
+        const userSnap = await db.collection("users").where("username", "==", username).get();
+        if (!userSnap.empty) {
+          return showNotif("Username already taken.");
+        }
+
+        // Default referral if none provided
+        if (referral === "") referral = "OBA";
+
+        // Create auth user
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        const uid = userCredential.user.uid;
+
+        // Create Firestore doc
+        await db.collection("users").doc(uid).set({
+          username: username,
+          email: email,
+          balance: 1, // signup bonus
+          totalEarnings: 1, // signup bonus
+          referredBy: referral,
+          createdAt: new Date().toISOString()
+        });
+
+        showNotif("Account created successfully!", "success");
+
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 1500);
+
+      } catch (error) {
+        showNotif(error.message);
+      }
+    }
+  </script>
+</body>
+</html>
