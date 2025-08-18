@@ -3,130 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us - OBA-ADS</title>
-  <meta name="description" content="Get in touch with OBA-ADS. Share feedback, inquiries, or partnership ideas. We value your thoughts and will respond as soon as possible.">
-  
-  <!-- Adsense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6719973154337085" crossorigin="anonymous"></script>
-  
-  <!-- Fonts & Styles -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Contact OBRIX</title>
+  <meta name="description" content="Get in touch with OBRIX. Send us your feedback, inquiries, or suggestions through our secure contact form.">
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
       margin: 0;
-      font-family: 'Roboto', sans-serif;
-      background: #f9f9f9;
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(to right, #f7f8fa, #eef2f3);
       color: #333;
     }
     header {
-      background: #004aad;
-      color: white;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-    nav {
-      background: #003580;
+      background: #111;
+      color: #fff;
+      padding: 15px 30px;
       display: flex;
-      justify-content: center;
-      padding: 0.5rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      color: #00b894;
     }
     nav a {
-      color: white;
-      margin: 0 1rem;
+      color: #fff;
+      margin-left: 20px;
       text-decoration: none;
-      font-weight: 500;
+      font-size: 1rem;
     }
     nav a:hover {
-      text-decoration: underline;
+      color: #00b894;
     }
-    .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 2rem;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    h1 {
+    .hero {
       text-align: center;
-      color: #004aad;
-    }
-    p {
-      text-align: center;
-      margin-bottom: 2rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    input, textarea {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-    }
-    textarea {
-      min-height: 120px;
-    }
-    button {
-      background: #004aad;
+      padding: 70px 20px;
+      background: url('https://images.unsplash.com/photo-1497493292307-31c376b6e479?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
       color: white;
-      padding: 1rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      cursor: pointer;
-      font-weight: 600;
     }
-    button:hover {
-      background: #003580;
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 15px;
+    }
+    .form-section {
+      max-width: 600px;
+      margin: 50px auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .form-section h3 {
+      margin-bottom: 20px;
+      color: #00b894;
+      text-align: center;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+    form button {
+      background: #00b894;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 1rem;
+    }
+    form button:hover {
+      background: #019172;
     }
     footer {
-      margin-top: 3rem;
-      padding: 1rem;
-      background: #003580;
-      color: white;
+      background: #111;
+      color: #ccc;
+      padding: 20px;
       text-align: center;
+    }
+    footer a {
+      color: #00b894;
+      margin: 0 10px;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
   <header>
-    <h2>OBA-ADS</h2>
-    <p>Your Trusted Platform for Knowledge, Finance & Lifestyle</p>
+    <h1>OBRIX</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
   </header>
 
-  <nav>
-    <a href="index.html">Home</a>
-    <a href="about.html">About</a>
-    <a href="services.html">Services</a>
-    <a href="blog.html">Blog</a>
-    <a href="contact.html">Contact</a>
-  </nav>
+  <section class="hero">
+    <h2>Contact Us</h2>
+    <p>We’d love to hear from you. Fill out the form below.</p>
+  </section>
 
-  <div class="container">
-    <h1>Contact Us</h1>
-    <p>We’d love to hear from you! Fill out the form below and we’ll get back to you as soon as possible.</p>
-
+  <section class="form-section">
+    <h3>Send us a message</h3>
     <form action="https://formsubmit.co/ifihanolami@gmail.com" method="POST">
-      <input type="text" name="name" placeholder="Your Full Name" required>
-      <input type="email" name="email" placeholder="Your Email Address" required>
-      <textarea name="message" placeholder="Write your message here..." required></textarea>
-
-      <!-- Redirect after submission -->
-      <input type="hidden" name="_next" value="https://oba-ads.netlify.app/thankyou.html">
-
+      <!-- Redirect after success -->
+      <input type="hidden" name="_next" value="https://oba-ads.netlify.app/thank-you.html">
       <!-- Prevent spam -->
       <input type="hidden" name="_captcha" value="false">
 
+      <input type="text" name="name" placeholder="Your Name" required>
+      <input type="email" name="email" placeholder="Your Email" required>
+      <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
       <button type="submit">Send Message</button>
     </form>
-  </div>
+  </section>
 
   <footer>
-    <p>&copy; 2025 OBA-ADS. All Rights Reserved.</p>
+    <p>&copy; 2025 OBRIX. All rights reserved.</p>
+    <p>
+      <a href="privacy.html">Privacy Policy</a> |
+      <a href="terms.html">Terms & Conditions</a> |
+      <a href="about.html">About</a>
+    </p>
   </footer>
 </body>
 </html>
